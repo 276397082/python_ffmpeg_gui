@@ -1,0 +1,2 @@
+# python_ffmpeg_gui
+基于ffmpeg的带GUI界面的视频压缩工具
