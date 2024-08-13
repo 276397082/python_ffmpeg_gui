@@ -45,7 +45,8 @@ class ProgressApp:
         self.root.title("视频压缩")
         width = 620
         height = 720
-
+        self.elapsed_time = 0
+        self.running = False
         screenwidth = self.root.winfo_screenwidth()
         screenheight = self.root.winfo_screenheight()
         self.root.geometry = "%dx%d+%d+%d" % (width, height, (screenwidth - width) / 2, (screenheight - height) / 2)
@@ -71,12 +72,17 @@ class ProgressApp:
         self.sav_btn = tk.Button(root, text="选择文件夹", takefocus=False, command=self.sav_btn_com)
         self.sav_btn.place(relx=0.7746, rely=0.65, relwidth=0.1884, relheight=0.0417)
         #
+        # 滑块
         self.labelsp = Label(root, text="速度(0最慢)：", anchor="center")
         self.labelsp.place(relx=0.0338, rely=0.7065, relwidth=0.1256, relheight=0.0417)
         #
         self.scale_sp = tk.Scale(root, orient=HORIZONTAL, from_=0, to=10, tickinterval=1, showvalue=False)
         self.scale_sp.place(relx=0.175, rely=0.7135, relwidth=0.5597, relheight=0.5417)
         self.scale_sp.set(2)
+        #
+        # 时间显示
+        self.timelab = Label(self.root, text="00:00:00", anchor="center")
+        self.timelab.place(relx=0.7746, rely=0.75, relwidth=0.1884, relheight=0.0417)
 
         # 清空按钮
         self.cls_btn = tk.Button(root, text="清空", takefocus=False, command=self.cls_ui)
@@ -139,6 +145,26 @@ class ProgressApp:
         self.process = None
         self.root.protocol("WM_DELETE_WINDOW", self.on_closing)
         self.thread_event = threading.Event()
+
+    def update_time(self):
+        if self.running:
+            self.elapsed_time += 0.1  # 每100毫秒增加0.1秒
+            hours, remainder = divmod(int(self.elapsed_time), 3600)
+            minutes, seconds = divmod(remainder, 60)
+            formatted_time = f"{hours:02}:{minutes:02}:{seconds:02}"
+            self.timelab.config(text=formatted_time)  # 更新标签文本
+            self.root.after(100, self.update_time)  # 每100毫秒调用一次自身以更新显示
+
+    def start_timer(self):
+        self.elapsed_time = 0
+
+        if not self.running:
+            self.running = True  # 设置为运行状态
+            self.update_time()  # 开始更新时间
+
+    def stop_timer(self):
+        if self.running:
+            self.running = False  # 停止计时
 
     def on_closing(self):
         # 处理关闭事件，杀死相关进程
@@ -314,14 +340,15 @@ class ProgressApp:
             progress2.show_progress(line.strip(), self)
 
     def get_path(self):
+        self.start_timer()
         # 获取滑块值
         _preset = self._preset(int(self.scale_sp.get()))
 
         num_items = self.listbox.size()
         sp = self.scale_sp.get()
-
+        files_counts = self.get_files_counts()
         # 整体进度
-        self.aaa = pr_main(self, self.progressbar_full, self.pr_lab_full_s, self.get_files_counts())
+        self.aaa = pr_main(self, self.progressbar_full, self.pr_lab_full_s, files_counts)
         self.aaa.start_progress()
         sav_lab = self.sav_text.cget("text")
         # 遍历每一个条目
@@ -355,7 +382,8 @@ class ProgressApp:
                 # j = j + 1
                 # self.aaa.update_progress(j)
 
-        if self.j == self.get_files_counts():
+        if self.j == files_counts:
+            self.stop_timer()
             messagebox.showinfo("Title", "转换完成！")
 
         self.lock_ui(1)

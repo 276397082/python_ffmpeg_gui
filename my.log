@@ -641,3 +641,33 @@
 2024-08-12 13:14:15 - INFO - <Popen: returncode: None args: ['./tools/ffmpeg.exe', '-y', '-i', 'X:\\Upupo...>
 2024-08-12 13:14:24 - INFO - run_command 执行
 2024-08-12 13:14:24 - INFO - <Popen: returncode: None args: ['./tools/ffmpeg.exe', '-y', '-i', 'X:\\Upupo...>
+2024-08-13 13:23:51 - INFO - 程序启动
+2024-08-13 13:27:01 - INFO - run_command 执行
+2024-08-13 13:27:01 - INFO - <Popen: returncode: None args: ['./tools/ffmpeg.exe', '-y', '-i', 'X:\\Upupo...>
+2024-08-13 13:29:52 - INFO - 程序启动
+2024-08-13 13:29:57 - INFO - run_command 执行
+2024-08-13 13:29:57 - INFO - <Popen: returncode: None args: ['./tools/ffmpeg.exe', '-y', '-i', 'X:\\Upupo...>
+2024-08-13 13:30:00 - INFO - run_command 执行
+2024-08-13 13:30:00 - INFO - <Popen: returncode: None args: ['./tools/ffmpeg.exe', '-y', '-i', 'X:\\Upupo...>
+2024-08-13 14:11:04 - INFO - 程序启动
+2024-08-13 14:14:29 - INFO - 程序启动
+2024-08-13 14:15:29 - INFO - 程序启动
+2024-08-13 14:15:37 - INFO - run_command 执行
+2024-08-13 14:15:37 - INFO - <Popen: returncode: None args: ['./tools/ffmpeg.exe', '-y', '-i', 'X:\\Upupo...>
+2024-08-13 14:16:53 - INFO - 程序启动
+2024-08-13 14:16:57 - INFO - run_command 执行
+2024-08-13 14:16:57 - INFO - <Popen: returncode: None args: ['./tools/ffmpeg.exe', '-y', '-i', 'X:\\Upupo...>
+2024-08-13 14:18:10 - INFO - run_command 执行
+2024-08-13 14:18:10 - INFO - <Popen: returncode: None args: ['./tools/ffmpeg.exe', '-y', '-i', 'X:\\Upupo...>
+2024-08-13 14:19:44 - INFO - 程序启动
+2024-08-13 14:19:48 - INFO - run_command 执行
+2024-08-13 14:19:48 - INFO - <Popen: returncode: None args: ['./tools/ffmpeg.exe', '-y', '-i', 'X:\\Upupo...>
+2024-08-13 14:19:56 - INFO - run_command 执行
+2024-08-13 14:19:56 - INFO - <Popen: returncode: None args: ['./tools/ffmpeg.exe', '-y', '-i', 'X:\\Upupo...>
+2024-08-13 14:20:29 - INFO - run_command 执行
+2024-08-13 14:20:29 - INFO - <Popen: returncode: None args: ['./tools/ffmpeg.exe', '-y', '-i', 'X:\\Upupo...>
+2024-08-13 14:21:27 - INFO - 程序启动
+2024-08-13 14:21:31 - INFO - run_command 执行
+2024-08-13 14:21:31 - INFO - <Popen: returncode: None args: ['./tools/ffmpeg.exe', '-y', '-i', 'X:\\Upupo...>
+2024-08-13 14:21:37 - INFO - run_command 执行
+2024-08-13 14:21:37 - INFO - <Popen: returncode: None args: ['./tools/ffmpeg.exe', '-y', '-i', 'X:\\Upupo...>
