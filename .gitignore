@@ -2,3 +2,5 @@ temp.txt
 test.txt
 my.log
 __pycache__
+dist
+build
