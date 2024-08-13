@@ -1,0 +1,49 @@
+
+
+# "./tools/ffmpeg.exe" -y -i "X:\\UpupooResource\\2000141996\\科技感设计 - 副本.mp4" -r 10 -pix_fmt yuv420p -vcodec libx264 -preset veryfast -profile:v baseline -crf 23 -acodec aac -b:a 32k -strict -5 "C:/liangzai_科技感设计 - 副本.mp4"
+
+
+import ffmpeg
+import sys
+import re
+import threading
+
+
+
+
+def convert_video(input_file, output_file):
+    # 获取文件大小
+ 
+    try:
+        process = (
+            ffmpeg.input(input_file)
+            .output(
+                output_file,
+                r=10,  # -r 10
+                pix_fmt="yuv420p",  # -pix_fmt yuv420p
+                vcodec="libx264",  # -vcodec libx264
+                preset="veryfast",  # -preset veryfast
+                **{"profile:v": "baseline"},  # -profile:v baseline
+                crf=23,  # -crf 23
+                acodec="aac",  # -acodec aac
+                **{"b:a": "32k"},  # -b:a 32k
+                strict="-5",  # -strict -5 (在 ffmpeg-python 中使用 -2 来允许实验性编码)
+            )
+            .global_args("-loglevel", "info")  # 设置日志级别
+            
+            .run(overwrite_output=True)
+        )
+    
+        print("\n转换完成！")
+        print(process)
+
+        
+
+    except ffmpeg.Error as e:
+        print(f"错误: {e.stderr.decode()}")
+
+
+# 示例调用
+input_path = r"X:\\UpupooResource\\2000141996\\科技感设计 - 副本.mp4"
+output_path = r"C:/liangzai_科技感设计 - 副本.mp4"
+convert_video(input_path, output_path)

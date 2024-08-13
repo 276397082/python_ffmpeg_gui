@@ -1,0 +1,4 @@
+pywin32==306
+tkinterdnd2==0.3.0
+tqdm==4.66.4
+windnd==1.0.7

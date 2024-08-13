@@ -1,0 +1,1 @@
+pyinstaller --onefile   --add-data "tools/*:tools" --add-data "c:\python311\lib\site-packages\tkinterdnd2;tkinterdnd2" --add-data "c:\python311\lib\site-packages\tkdnd;tkdnd" --hidden-import=tkinterdnd2 --hidden-import=tkdnd --clean main.py
