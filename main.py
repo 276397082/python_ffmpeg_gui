@@ -249,7 +249,7 @@ class ProgressApp:
             # process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, encoding="utf-8")
             process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, encoding="utf-8")
 
-            logging.info(process)
+            logging.info(command)
             # print(process.stdout)
             # 读取
             # for line in process.stdout:
