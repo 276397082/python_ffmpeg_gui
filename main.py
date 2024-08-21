@@ -247,7 +247,7 @@ class ProgressApp:
 
             progress2 = Progress(value=self.progress_bar)
             # process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, encoding="utf-8")
-            process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, encoding="utf-8")
+            process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, encoding="latin-1")
 
             logging.info(command)
             # print(process.stdout)
@@ -278,7 +278,7 @@ class ProgressApp:
                 self.aaa.update_progress(self.j)
 
         except Exception as e:
-            logging.error(f"run_command_except Exception as e: {e}")
+            logging.error(f"run_command_except Exception as e: {del_file}{e}")
 
         finally:
             progress2.cleanup()
@@ -385,6 +385,8 @@ class ProgressApp:
         if self.j == files_counts:
             self.stop_timer()
             messagebox.showinfo("Title", "转换完成！")
+        else:
+            self.stop_timer()
 
         self.lock_ui(1)
         self.cls_ui()
