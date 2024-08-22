@@ -83,6 +83,12 @@ class ProgressApp:
         # 时间显示
         self.timelab = Label(self.root, text="00:00:00", anchor="center")
         self.timelab.place(relx=0.7746, rely=0.75, relwidth=0.1884, relheight=0.0417)
+        #
+        #
+
+        self.Combobox_EX = ttk.Combobox(root, values=["默认格式", ".MP4", ".MPEG4", ".AVI", ".WMV", ".FLV", ".MKV", ".GIF", ".WEBM", ".OGG", ".MOV"])
+        self.Combobox_EX.set("默认格式")
+        self.Combobox_EX.place(relx=0.7746, rely=0.7, relwidth=0.1884, relheight=0.0417)
 
         # 清空按钮
         self.cls_btn = tk.Button(root, text="清空", takefocus=False, command=self.cls_ui)
@@ -435,7 +441,10 @@ class ProgressApp:
         file_info = self.get_file_info(files)
         f_name = file_info["file_name"]
         f_fold = sav_path
-        f_ex = file_info["extension"]
+        f_ex = self.Combobox_EX.get()
+        if f_ex == "默认格式":
+            f_ex = file_info["extension"]
+
         self.files.config(text=f_name)
         if not sav_path:
             f_fold = file_info["folder_name"]
@@ -492,6 +501,7 @@ class ProgressApp:
         self.progressbar_full["value"] = 0
         self.pr_lab_full_s.config(text="")
         self.files.config(text="")
+        self.Combobox_EX.set("默认格式")
 
     def lock_ui(self, l=0):
         self.j = 0
@@ -509,6 +519,7 @@ class ProgressApp:
         self.sizp_lab.config(state=s)
         self.pr_lab_s.config(state=s)
         self.pr_lab_full_s.config(state=s)
+        self.Combobox_EX.config(state=s)
 
     def decode_hex_escapes(self, s):
         # 正则表达式匹配十六进制转义序列
