@@ -448,7 +448,11 @@ class ProgressApp:
         """
         b = os.path.basename(src)
         d = os.path.join(dst, b)
-        os.makedirs(d, exist_ok=True)
+        if not os.path.exists(dst):
+            dst = src
+            d = os.path.join(dst)
+        else:
+            os.makedirs(d, exist_ok=True)
         total_files = 0
         # 遍历 src 目录结构
         for root, dirs, files in os.walk(src):
@@ -555,6 +559,7 @@ class ProgressApp:
         compress2 = '"./tools/ffmpeg.exe" -y -i "{}" -r 10 -pix_fmt yuv420p -vcodec libx264 -preset {} -profile:v baseline -crf 23 -acodec aac -b:a 32k -strict -5 "{}"'.format(
             files, _preset, sav_filepath
         )
+        # print((files, sav_filepath))
         # shutil.copy2(files, sav_filepath)
         # return
         # compress2 = '"./tools/ffmpeg.exe" -y -i "{}" -r 10 -pix_fmt yuv420p -vcodec libx264 -preset {} -profile baseline -crf 23 -acodec aac -b 32k -strict -5 "{}"'.format(            files, _preset, sav_filepath        )
