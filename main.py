@@ -54,6 +54,9 @@ def cc():
             json.dump(config_content, f, indent=4)
 
 
+cc()
+
+
 class ProgressApp:
 
     def __init__(self, root):
