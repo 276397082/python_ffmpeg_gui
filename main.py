@@ -2,12 +2,14 @@ import ast
 import asyncio
 import concurrent.futures
 import ctypes
+import json
 import logging
 import os
 import queue
 import re
 import select
 import shlex
+import shutil
 import signal
 import subprocess
 import sys
@@ -36,6 +38,20 @@ logging.basicConfig(
     filename="./my.log", level=logging.DEBUG, format="%(asctime)s - %(levelname)s - %(message)s", datefmt="%Y-%m-%d %H:%M:%S", encoding="utf-8"
 )  # 设置日志级别  # 日志格式  # 时间戳格式
 logging.info("程序启动")
+
+
+def cc():
+    # 配置文件名
+    config_file = "config.json"
+
+    # 配置内容
+    config_content = {"videoSuffixSet": ["WMV", "ASF", "ASX", "RM", "RMVB", "MP4", "3GP", "MOV", "M4V", "AVI", "DAT", "MKV", "FIV", "VOB", "FLV"]}
+
+    # 检查配置文件是否存在
+    if not os.path.exists(config_file):
+        with open(config_file, "w") as f:
+            # 将字典写入JSON文件
+            json.dump(config_content, f, indent=4)
 
 
 class ProgressApp:
@@ -363,7 +379,7 @@ class ProgressApp:
             # print(f"Item {i}: {item}")
             if os.path.isdir(item):
 
-                self.dir_obj(item, self.j, _preset)
+                self.dir_obj(item, sav_lab, _preset)
             else:
 
                 # file_info = self.get_file_info(item)
@@ -398,6 +414,20 @@ class ProgressApp:
         self.cls_ui()
 
     def get_files_counts(self):
+        total_files = 0
+        # os.walk()返回一个生成器，生成每个目录下的路径、目录列表和文件列表
+        num_items = self.listbox.size()
+        total_files += num_items
+        for i in range(num_items):
+            item = self.listbox.get(i)
+            if os.path.isdir(item):
+                total_files -= 1
+                for root, dirs, files in os.walk(item):
+                    total_files += len(files)
+
+        return total_files
+
+    def get_files_counts1(self):
         c = 0
         num_items = self.listbox.size()
         c += num_items
@@ -408,7 +438,78 @@ class ProgressApp:
                 c += len(file_list) - 1
         return c
 
-    def dir_obj(self, path_str, j, _preset):
+    def dir_obj(self, src, dst, _preset):
+        """目录递归
+
+        Args:
+            src (str) : 源
+            dst (str): 目标
+            _preset (str): 压缩参数
+        """
+        b = os.path.basename(src)
+        d = os.path.join(dst, b)
+        os.makedirs(d, exist_ok=True)
+        total_files = 0
+        # 遍历 src 目录结构
+        for root, dirs, files in os.walk(src):
+            # 计算目标目录
+            relative_path = os.path.relpath(root, src)  # 获取相对路径
+
+            dst_root = os.path.join(dst, d, relative_path)  # 目标根目录
+            total_files += len(files)
+            # 创建目标目录
+            os.makedirs(dst_root, exist_ok=True)
+
+            for f in files:
+                # 源文件路径
+                src_file = os.path.join(root, f)
+                # 目标文件路径，加上 _cp 后缀
+                # dst_file = os.path.join(dst_root, f"{os.path.splitext(f)[0]}_cp{os.path.splitext(f)[1]}")
+                dst_file = os.path.join(dst_root)
+                if not self.is_video(f):
+                    self.j += 1
+                    continue
+                self.c_cmd(src_file, dst_file, _preset)
+                # 复制文件
+                # shutil.copy2(src_file, dst_file)  # 使用 copy2 保留元数据
+
+                # print(f"复制: {src_file} 到 {dst_file}")
+        # print(total_files)
+
+    def dir_obj2(self, src, dst, _preset):
+        """目录递归
+
+        Args:
+            src (str) : 源
+            dst (str): 目标
+            _preset (str): 压缩参数
+        """
+
+        # 获取src的文件夹名称
+        folder_name = os.path.basename(src)
+
+        if not os.path.exists(dst):
+            sav_path = src
+        else:
+            sav_path = os.path.join(dst, folder_name)
+        # 在dst中创建名为folder_name的文件夹
+        new_dst = sav_path
+        if not os.path.exists(new_dst):
+            os.makedirs(new_dst)
+
+        for item in os.listdir(src):
+            s = os.path.join(src, item)
+            d = os.path.join(new_dst, item)
+            if os.path.isdir(s):
+                self.dir_obj(s, new_dst, _preset)
+            else:
+                # print(s, d + "_save")
+                if not self.is_video(d):
+                    self.j += 1
+                    continue
+                self.c_cmd(s, new_dst, _preset)
+
+    def dir_obj1(self, path_str, j, _preset):
         folder_name = os.path.basename(path_str)
         sav_lab = self.sav_text.cget("text")
         if not os.path.exists(sav_lab):
@@ -454,7 +555,7 @@ class ProgressApp:
         compress2 = '"./tools/ffmpeg.exe" -y -i "{}" -r 10 -pix_fmt yuv420p -vcodec libx264 -preset {} -profile:v baseline -crf 23 -acodec aac -b:a 32k -strict -5 "{}"'.format(
             files, _preset, sav_filepath
         )
-        # print(compress2)
+        # shutil.copy2(files, sav_filepath)
         # return
         # compress2 = '"./tools/ffmpeg.exe" -y -i "{}" -r 10 -pix_fmt yuv420p -vcodec libx264 -preset {} -profile baseline -crf 23 -acodec aac -b 32k -strict -5 "{}"'.format(            files, _preset, sav_filepath        )
 
@@ -540,7 +641,11 @@ class ProgressApp:
     # 当文件或目录被拖放到窗口时调用的函数
 
     def is_video(self, filename):
-        videoSuffixSet = {"WMV", "ASF", "ASX", "RM", "RMVB", "MP4", "3GP", "MOV", "M4V", "AVI", "DAT", "MKV", "FIV", "VOB"}
+        # 读取配置文件
+        if os.path.exists("config.json"):
+            with open("config.json", "r") as f:
+                config_data = json.load(f)
+        videoSuffixSet = config_data["videoSuffixSet"]
         suffix = filename.rsplit(".", 1)[-1].upper()
         if suffix in videoSuffixSet:
             return True
