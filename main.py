@@ -271,8 +271,8 @@ class ProgressApp:
             logging.info("run_command 执行")
 
             progress2 = Progress(value=self.progress_bar)
-            # process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, encoding="utf-8")
-            process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, encoding="latin-1")
+            process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, encoding="utf-8")
+            # process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, encoding="latin-1")
 
             logging.info(command)
             # print(process.stdout)
@@ -286,7 +286,11 @@ class ProgressApp:
             # thread_pr.daemon = True
             # thread_pr.start()
 
-            self.red_process(progress2, process)
+            a = self.red_process(progress2, process)
+            if not a:
+                logging.error(f"文件错误: {del_file}")
+                self.j += 1
+                return False
 
             exit_code = process.wait()
             if exit_code:
@@ -361,6 +365,8 @@ class ProgressApp:
     def red_process(self, progress2, process):
 
         for line in process.stdout:
+            if "illegal" in line:
+                return False
 
             progress2.show_progress(line.strip(), self)
 
