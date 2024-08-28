@@ -45,7 +45,7 @@ def cc():
     config_file = "config.json"
 
     # 配置内容
-    config_content = {"videoSuffixSet": ["WMV", "ASF", "ASX", "RM", "RMVB", "MP4", "3GP", "MOV", "M4V", "AVI", "DAT", "MKV", "FIV", "VOB", "FLV"]}
+    config_content = {"videoSuffixSet": ["WMV", "ASF", "ASX", "RM", "RMVB", "MP4", "3GP", "MOV", "M4V", "AVI", "DAT", "MKV", "FIV", "VOB", "FLV", "MTS"]}
 
     # 检查配置文件是否存在
     if not os.path.exists(config_file):
@@ -292,7 +292,7 @@ class ProgressApp:
                 self.j += 1
                 self.aaa.update_progress(self.j)
                 ki = subprocess.run(["taskkill", "/F", "/IM", "ffmpeg.exe"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-                #os.system("taskkill /F /IM ffmpeg.exe")
+                # os.system("taskkill /F /IM ffmpeg.exe")
                 os.unlink(new_file)
 
                 return False
@@ -375,6 +375,7 @@ class ProgressApp:
                 return False
 
             progress2.show_progress(line.strip(), self)
+        return True
 
     def get_path(self):
         self.start_timer()
