@@ -265,7 +265,7 @@ class ProgressApp:
 
         return {"file_name": name, "folder_name": folder_name, "extension": extension}
 
-    def run_command(self, command, del_file):
+    def run_command(self, command, del_file, new_file):
 
         try:
             logging.info("run_command 执行")
@@ -290,6 +290,9 @@ class ProgressApp:
             if not a:
                 logging.error(f"文件错误: {del_file}")
                 self.j += 1
+                os.system("taskkill /F /IM ffmpeg.exe")
+                os.unlink(new_file)
+
                 return False
 
             exit_code = process.wait()
@@ -298,6 +301,7 @@ class ProgressApp:
                 if not progress2.verbose:
                     # print(f"Error occurred with exit code {exit_code}")
                     logging.error(f"run_command: {exit_code}")
+
                     return False
             else:
                 _del_chk = self.v1.get()
@@ -581,7 +585,7 @@ class ProgressApp:
         # drop_thread.start()
         # 启动多个线程
 
-        return self.run_command(compress2, files)
+        return self.run_command(compress2, files, sav_filepath)
 
     def button_clicked(self):
         if not self.listbox.size():
