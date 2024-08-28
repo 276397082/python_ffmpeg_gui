@@ -290,6 +290,7 @@ class ProgressApp:
             if not a:
                 logging.error(f"文件错误: {del_file}")
                 self.j += 1
+                self.aaa.update_progress(self.j)
                 ki = subprocess.run(["taskkill", "/F", "/IM", "ffmpeg.exe"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
                 #os.system("taskkill /F /IM ffmpeg.exe")
                 os.unlink(new_file)
