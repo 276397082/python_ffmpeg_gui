@@ -45,7 +45,7 @@ def cc():
     config_file = "config.json"
 
     # 配置内容
-    config_content = {"videoSuffixSet": ["WMV", "ASF", "ASX", "RM", "RMVB", "MP4", "3GP", "MOV", "M4V", "AVI", "DAT", "MKV", "FIV", "VOB", "FLV", "MTS"]}
+    config_content = {"videoSuffixSet": ["WMV", "ASF", "ASX", "RM", "RMVB", "MP4", "3GP", "MOV", "M4V", "AVI", "DAT", "MKV", "FIV", "VOB", "FLV", "MTS"], "videoError": ["illegal", "reached"]}
 
     # 检查配置文件是否存在
     if not os.path.exists(config_file):
@@ -271,8 +271,8 @@ class ProgressApp:
             logging.info("run_command 执行")
 
             progress2 = Progress(value=self.progress_bar)
-            process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, encoding="utf-8")
-            # process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, encoding="latin-1")
+            # process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, encoding="utf-8")
+            process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, encoding="latin-1")
 
             logging.info(command)
             # print(process.stdout)
@@ -313,6 +313,7 @@ class ProgressApp:
                 self.aaa.update_progress(self.j)
 
         except Exception as e:
+            self.j += 1
             logging.error(f"run_command_except Exception as e: {del_file}{e}")
 
         finally:
@@ -369,9 +370,16 @@ class ProgressApp:
                     progress2.show_progress(output.strip(), self)  # 更新进度显示方法
 
     def red_process(self, progress2, process):
+        # 读取配置文件
+        if os.path.exists("config.json"):
+            with open("config.json", "r") as f:
+                config_data = json.load(f)
+        videoSuffixSet = config_data["videoError"]
+        # 创建正则表达式（用 | 连接多个关键字）
+        pattern = '|'.join(videoSuffixSet)
 
         for line in process.stdout:
-            if "illegal" in line:
+            if re.search(pattern, line):
                 return False
 
             progress2.show_progress(line.strip(), self)

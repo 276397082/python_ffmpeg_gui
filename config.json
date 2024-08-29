@@ -16,5 +16,9 @@
         "VOB",
         "FLV",
         "MTS"
+    ],
+    "videoError": [
+        "illegal",
+        "reached"
     ]
 }
