@@ -314,7 +314,11 @@ class ProgressApp:
 
         except Exception as e:
             self.j += 1
-            logging.error(f"run_command_except Exception as e: {del_file}{e}")
+            self.aaa.update_progress(self.j)
+            ki = subprocess.run(["taskkill", "/F", "/IM", "ffmpeg.exe"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            # os.system("taskkill /F /IM ffmpeg.exe")
+            os.unlink(new_file)
+            logging.error(f"文件错误: {e}-{del_file}")
 
         finally:
             progress2.cleanup()
@@ -376,7 +380,7 @@ class ProgressApp:
                 config_data = json.load(f)
         videoSuffixSet = config_data["videoError"]
         # 创建正则表达式（用 | 连接多个关键字）
-        pattern = '|'.join(videoSuffixSet)
+        pattern = "|".join(videoSuffixSet)
 
         for line in process.stdout:
             if re.search(pattern, line):
