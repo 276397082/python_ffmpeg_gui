@@ -45,7 +45,10 @@ def cc():
     config_file = "config.json"
 
     # 配置内容
-    config_content = {"videoSuffixSet": ["WMV", "ASF", "ASX", "RM", "RMVB", "MP4", "3GP", "MOV", "M4V", "AVI", "DAT", "MKV", "FIV", "VOB", "FLV", "MTS"], "videoError": ["illegal", "reached"]}
+    config_content = {
+        "videoSuffixSet": ["WMV", "ASF", "ASX", "RM", "RMVB", "MP4", "3GP", "MOV", "M4V", "AVI", "DAT", "MKV", "FIV", "VOB", "FLV", "MTS"],
+        "videoError": ["illegal", "reached", "discontinuity"],
+    }
 
     # 检查配置文件是否存在
     if not os.path.exists(config_file):
