@@ -95,10 +95,10 @@ class ProgressApp:
         self.sav_btn.place(relx=0.7746, rely=0.65, relwidth=0.1884, relheight=0.0417)
         #
         # 滑块
-        self.labelsp = Label(root, text="速度(0最慢)：", anchor="center")
+        self.labelsp = Label(root, text="速度(0最快)：", anchor="center")
         self.labelsp.place(relx=0.0338, rely=0.7065, relwidth=0.1256, relheight=0.0417)
         #
-        self.scale_sp = tk.Scale(root, orient=HORIZONTAL, from_=0, to=10, tickinterval=1, showvalue=False)
+        self.scale_sp = tk.Scale(root, orient=HORIZONTAL, from_=0, to=9, tickinterval=1, showvalue=False)
         self.scale_sp.place(relx=0.175, rely=0.7135, relwidth=0.5597, relheight=0.5417)
         self.scale_sp.set(2)
         #
