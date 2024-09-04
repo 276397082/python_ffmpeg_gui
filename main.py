@@ -47,7 +47,7 @@ def cc():
     # 配置内容
     config_content = {
         "videoSuffixSet": ["WMV", "ASF", "ASX", "RM", "RMVB", "MP4", "3GP", "MOV", "M4V", "AVI", "DAT", "MKV", "FIV", "VOB", "FLV", "MTS"],
-        "videoError": ["illegal", "reached", "discontinuity"],
+        "videoError": ["illegal", "reached", "discontinuity", "Error"],
     }
 
     # 检查配置文件是否存在
@@ -296,7 +296,10 @@ class ProgressApp:
                 self.aaa.update_progress(self.j)
                 ki = subprocess.run(["taskkill", "/F", "/IM", "ffmpeg.exe"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
                 # os.system("taskkill /F /IM ffmpeg.exe")
-                os.unlink(new_file)
+                try:
+                    os.unlink(new_file)
+                except FileNotFoundError:
+                    pass
 
                 return False
 
@@ -311,7 +314,11 @@ class ProgressApp:
             else:
                 _del_chk = self.v1.get()
                 if _del_chk:
-                    os.unlink(del_file)
+
+                    try:
+                        os.unlink(del_file)
+                    except FileNotFoundError:
+                        pass
                 self.j += 1
                 self.aaa.update_progress(self.j)
 
@@ -320,7 +327,10 @@ class ProgressApp:
             self.aaa.update_progress(self.j)
             ki = subprocess.run(["taskkill", "/F", "/IM", "ffmpeg.exe"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
             # os.system("taskkill /F /IM ffmpeg.exe")
-            os.unlink(new_file)
+            try:
+                os.unlink(new_file)
+            except FileNotFoundError:
+                pass
             logging.error(f"文件错误: {e}-{del_file}")
 
         finally:
@@ -357,7 +367,10 @@ class ProgressApp:
             else:
                 _del_chk = self.v1.get()
                 if _del_chk:
-                    os.unlink(del_file)
+                    try:
+                        os.unlink(del_file)
+                    except FileNotFoundError:
+                        pass
                 self.j += 1
                 self.aaa.update_progress(self.j)
                 os.remove("./temp.txt")

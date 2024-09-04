@@ -19,6 +19,8 @@
     ],
     "videoError": [
         "illegal",
-        "reached"
+        "reached",
+        "discontinuity",
+        "Error"
     ]
 }
