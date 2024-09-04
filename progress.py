@@ -37,6 +37,8 @@ class Progress:
             return 100
         curr_time_in_seconds = result["time"].time_in_secs
         percent_complete = int(curr_time_in_seconds * 100 / duration_in_seconds)
+        if percent_complete > 100:
+            percent_complete = 100
 
         return percent_complete
 
@@ -56,7 +58,7 @@ class Progress:
             if percent_complete > self.percent_complete:
 
                 self._update_pbar(percent_complete, result, value)
-                
+
                 self.percent_complete = percent_complete
         elif self.verbose:
             # print(line, flush=True)
@@ -72,7 +74,7 @@ class Progress:
         # V.text_var2.set(self.pbar.aaa[1])
 
         self.pbar.update(percent_complete - self.percent_complete)
-        
+
         self._up_ui(percent_complete, V)
         # szize = self.pbar.aaa[1].split("||")
         # V.progress_bar["value"] = percent_complete
@@ -93,9 +95,8 @@ class Progress:
         V.sizp_lab.config(text=szize[1])
         V.pr_lab_s.config(text=szize[0])
         time.sleep(0.1)
-        #V.root.update_idletasks()
+        # V.root.update_idletasks()
         V.root.update_idletasks()
-
 
     def cleanup(self):
         self.pbar.close()

@@ -274,8 +274,8 @@ class ProgressApp:
             logging.info("run_command 执行")
 
             progress2 = Progress(value=self.progress_bar)
-            # process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, encoding="utf-8")
-            process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, encoding="latin-1")
+            process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, encoding="utf-8")
+            # process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, encoding="latin-1")
 
             logging.info(command)
             # print(process.stdout)
@@ -399,6 +399,7 @@ class ProgressApp:
         pattern = "|".join(videoSuffixSet)
 
         for line in process.stdout:
+            # print(line)
             if re.search(pattern, line):
                 return False
 
