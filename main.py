@@ -18,6 +18,7 @@ import threading
 import time
 import tkinter as tk
 import urllib.parse
+from pathlib import Path
 from queue import Queue
 from threading import Thread
 from tkinter import *
@@ -269,6 +270,11 @@ class ProgressApp:
         return {"file_name": name, "folder_name": folder_name, "extension": extension}
 
     def run_command(self, command, del_file, new_file):
+        def rename_file(file_path=Path(del_file)):
+            try:
+                os.rename(file_path, file_path.with_name(f"{file_path.stem}_E{file_path.suffix}"))
+            except Exception as e:
+                logging.error(f"重命名文件时出错: {e}")
 
         try:
             logging.info("run_command 执行")
@@ -295,6 +301,7 @@ class ProgressApp:
 
                 ki = subprocess.run(["taskkill", "/F", "/IM", "ffmpeg.exe"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
                 # os.system("taskkill /F /IM ffmpeg.exe")
+                rename_file()
                 try:
                     os.unlink(new_file)
                 except FileNotFoundError:
@@ -308,10 +315,12 @@ class ProgressApp:
                 if not progress2.verbose:
                     # print(f"Error occurred with exit code {exit_code}")
                     logging.error(f"run_command: {exit_code}")
+
                     # self.j += 1
                     # self.aaa.update_progress(self.j)
                     ki = subprocess.run(["taskkill", "/F", "/IM", "ffmpeg.exe"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
                     # os.system("taskkill /F /IM ffmpeg.exe")
+                    rename_file()
                     try:
                         os.unlink(new_file)
                     except FileNotFoundError:
@@ -340,6 +349,7 @@ class ProgressApp:
             except FileNotFoundError:
                 pass
             logging.error(f"文件错误: {e}-{del_file}")
+            rename_file()
 
         finally:
             self.j += 1
