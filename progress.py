@@ -39,6 +39,8 @@ class Progress:
         percent_complete = int(curr_time_in_seconds * 100 / duration_in_seconds)
         if percent_complete > 100:
             percent_complete = 100
+        if percent_complete >= 95 and percent_complete < 100:
+            percent_complete = 100
 
         return percent_complete
 
