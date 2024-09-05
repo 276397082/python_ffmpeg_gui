@@ -309,6 +309,14 @@ class ProgressApp:
                 if not progress2.verbose:
                     # print(f"Error occurred with exit code {exit_code}")
                     logging.error(f"run_command: {exit_code}")
+                    self.j += 1
+                    self.aaa.update_progress(self.j)
+                    ki = subprocess.run(["taskkill", "/F", "/IM", "ffmpeg.exe"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+                    # os.system("taskkill /F /IM ffmpeg.exe")
+                    try:
+                        os.unlink(new_file)
+                    except FileNotFoundError:
+                        pass
 
                     return False
             else:
