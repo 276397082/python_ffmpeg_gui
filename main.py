@@ -292,8 +292,7 @@ class ProgressApp:
             a = self.red_process(progress2, process)
             if not a:
                 logging.error(f"文件错误: {del_file}")
-                self.j += 1
-                self.aaa.update_progress(self.j)
+
                 ki = subprocess.run(["taskkill", "/F", "/IM", "ffmpeg.exe"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
                 # os.system("taskkill /F /IM ffmpeg.exe")
                 try:
@@ -309,8 +308,8 @@ class ProgressApp:
                 if not progress2.verbose:
                     # print(f"Error occurred with exit code {exit_code}")
                     logging.error(f"run_command: {exit_code}")
-                    self.j += 1
-                    self.aaa.update_progress(self.j)
+                    # self.j += 1
+                    # self.aaa.update_progress(self.j)
                     ki = subprocess.run(["taskkill", "/F", "/IM", "ffmpeg.exe"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
                     # os.system("taskkill /F /IM ffmpeg.exe")
                     try:
@@ -320,6 +319,7 @@ class ProgressApp:
 
                     return False
             else:
+                ##成功
                 _del_chk = self.v1.get()
                 if _del_chk:
 
@@ -327,12 +327,12 @@ class ProgressApp:
                         os.unlink(del_file)
                     except FileNotFoundError:
                         pass
-                self.j += 1
-                self.aaa.update_progress(self.j)
+                # self.j += 1
+                # self.aaa.update_progress(self.j)
 
         except Exception as e:
-            self.j += 1
-            self.aaa.update_progress(self.j)
+            # self.j += 1
+            # self.aaa.update_progress(self.j)
             ki = subprocess.run(["taskkill", "/F", "/IM", "ffmpeg.exe"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
             # os.system("taskkill /F /IM ffmpeg.exe")
             try:
@@ -342,6 +342,8 @@ class ProgressApp:
             logging.error(f"文件错误: {e}-{del_file}")
 
         finally:
+            self.j += 1
+            self.aaa.update_progress(self.j)
             progress2.cleanup()
 
     def run_command2(self, command, del_file):
