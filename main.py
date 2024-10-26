@@ -109,7 +109,7 @@ class ProgressApp:
         #
         #
 
-        self.Combobox_EX = ttk.Combobox(root, values=["默认格式", ".MP4", ".MPEG4", ".AVI", ".WMV", ".FLV", ".MKV", ".GIF", ".WEBM", ".OGG", ".MOV"])
+        self.Combobox_EX = ttk.Combobox(root, values=["默认格式", ".MP4", ".MP3", ".MPEG4", ".AVI", ".WMV", ".FLV", ".MKV", ".GIF", ".WEBM", ".OGG", ".MOV"])
         self.Combobox_EX.set("默认格式")
         self.Combobox_EX.place(relx=0.7746, rely=0.7, relwidth=0.1884, relheight=0.0417)
 
@@ -618,12 +618,15 @@ class ProgressApp:
         self.files.config(text=f_name)
         if not sav_path:
             f_fold = file_info["folder_name"]
-
+        if "." not in f_ex:
+            f_ex = "." + f_ex
         sav_filepath = os.path.join(f_fold, f_name + "_lz" + f_ex)
-
-        compress2 = '"./tools/ffmpeg.exe" -y -i "{}" -r 10 -pix_fmt yuv420p -vcodec libx264 -preset {} -profile:v baseline -crf 23 -acodec aac -b:a 32k -strict -5 "{}"'.format(
-            files, _preset, sav_filepath
-        )
+        if "MP3" in f_ex.upper():
+            compress2 = '"./tools/ffmpeg.exe" -y -i "{}" -vn -acodec libmp3lame -ab 320k "{}"'.format(files, sav_filepath)
+        else:
+            compress2 = '"./tools/ffmpeg.exe" -y -i "{}" -r 10 -pix_fmt yuv420p -vcodec libx264 -preset {} -profile:v baseline -crf 23 -acodec aac -b:a 32k -strict -5 "{}"'.format(
+                files, _preset, sav_filepath
+            )
         # print((files, sav_filepath))
         # shutil.copy2(files, sav_filepath)
         # return
